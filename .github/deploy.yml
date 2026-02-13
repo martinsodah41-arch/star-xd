@@ -1,0 +1,22 @@
+> Credits 𝙎𝙐𝙃𝙊 𝙏𝙀𝘾𝙃
+
+// plugins/ship.js
+export default {
+  cmd: ['ship'],
+  desc: 'Ship two people (tag or mention two)',
+
+  async execute(m, { sock, text, mentionedJid }) {
+    if (mentionedJid?.length < 2) {
+      return sock.sendMessage(m.key.remoteJid, { text: "Tag/mention **two people** to ship! Example: .ship @user1 @user2" });
+    }
+
+    const [p1, p2] = mentionedJid;
+    const percent = Math.floor(Math.random() * 101);
+    const hearts = '❤️'.repeat(Math.floor(percent / 10)) + '🖤'.repeat(10 - Math.floor(percent / 10));
+
+    await sock.sendMessage(m.key.remoteJid, {
+      text: `💕 *SHIP METER*\n\n@\( {p1.split('@')[0]} × @ \){p2.split('@')[0]}\n\nCompatibility: **\( {percent}%**\n \){hearts}\n\n${percent > 80 ? 'Soulmates frfr 💍' : percent > 50 ? 'Cute couple vibes' : percent > 20 ? 'Maybe in another universe' : 'Divorce incoming 🚮'}`,
+      mentions: [p1, p2]
+    });
+  }
+};
